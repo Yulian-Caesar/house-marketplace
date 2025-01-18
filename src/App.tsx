@@ -6,6 +6,7 @@ import { Profile as ProfilePage } from "./pages/Profile"
 import { SignIn as SignInPage } from "./pages/SignIn"
 import { SignUp as SignUpPage } from "./pages/SignUp"
 import { Navbar } from "./components/Navbar"
+import { ToastContainer } from "react-toastify"
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
 				</Routes>
 				<Navbar />
 			</Router>
+			<ToastContainer />
 		</>
 	)
 }

@@ -5,8 +5,9 @@ import { Link, useNavigate } from "react-router";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc, FieldValue, serverTimestamp } from "firebase/firestore";
 import app, { db } from "../firebase.config";
+import { toast } from "react-toastify";
 
-type FormDataType = {
+export type FormDataType = {
 	name: string,
 	email: string,
 	password?: string,
@@ -55,8 +56,8 @@ export const SignUp = () => {
 			await setDoc(doc(db, 'users', user.uid), formDataCopy)
 
 			navigate('/')
-		} catch (error) {
-			console.error(error)
+		} catch {
+			toast.error('Something went wrong with registration')
 		}
 	}
 

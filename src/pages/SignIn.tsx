@@ -4,6 +4,7 @@ import visibilityIcon from "../assets/svg/visibilityIcon.svg";
 import { Link, useNavigate } from "react-router";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import app from "../firebase.config";
+import { toast } from "react-toastify";
 
 export const SignIn = () => {
 	const [showPassword, setShowPassword] = useState(false)
@@ -33,8 +34,8 @@ export const SignIn = () => {
 			if(userCredential.user) {
 				navigate('/')
 			}
-		} catch(error) {
-			console.error(error)
+		} catch {
+			toast.error('Bad User Credentials')
 		}
 	}
 
