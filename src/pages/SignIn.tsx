@@ -2,6 +2,8 @@ import { useState } from "react";
 import ArrowRightIcon from "../assets/svg/keyboardArrowRightIcon.svg?react";
 import visibilityIcon from "../assets/svg/visibilityIcon.svg";
 import { Link, useNavigate } from "react-router";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import app from "../firebase.config";
 
 export const SignIn = () => {
 	const [showPassword, setShowPassword] = useState(false)
@@ -13,11 +15,27 @@ export const SignIn = () => {
 
 	const navigate = useNavigate();
 
-	const onChange = (e) => {
+	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFormData((prevState) => ({
 			...prevState,
 			[e.target.id]: e.target.value
 		}))
+	}
+
+	const onSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		try {
+			const auth = getAuth(app);
+
+			const userCredential = await signInWithEmailAndPassword(auth, email, password);
+	
+			if(userCredential.user) {
+				navigate('/')
+			}
+		} catch(error) {
+			console.error(error)
+		}
 	}
 
 	return (
@@ -30,7 +48,7 @@ export const SignIn = () => {
 				</header>
 
 				{/*<main>*/}
-					<form>
+					<form onSubmit={onSubmit}>
 						<input 
 							type="email" 
 							placeholder="Email" 
@@ -63,7 +81,7 @@ export const SignIn = () => {
 
 						<div className="signInBar">
 							<p className="signInText">Sign In</p>
-							<button className="signInButton">
+							<button type="submit" className="signInButton">
 								<ArrowRightIcon fill='#ffffff' width='34px' height='34px' />
 							</button>
 						</div>
