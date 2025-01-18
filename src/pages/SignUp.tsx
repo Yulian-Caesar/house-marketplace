@@ -2,10 +2,20 @@ import { useState } from "react";
 import ArrowRightIcon from "../assets/svg/keyboardArrowRightIcon.svg?react";
 import visibilityIcon from "../assets/svg/visibilityIcon.svg";
 import { Link, useNavigate } from "react-router";
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, setDoc, FieldValue, serverTimestamp } from "firebase/firestore";
+import app, { db } from "../firebase.config";
+
+type FormDataType = {
+	name: string,
+	email: string,
+	password?: string,
+	timestamp?: FieldValue
+}
 
 export const SignUp = () => {
 	const [showPassword, setShowPassword] = useState(false)
-	const [formData, setFormData] = useState({
+	const [formData, setFormData] = useState<FormDataType>({
 		name: '',
 		email: '',
 		password: ''
@@ -14,11 +24,40 @@ export const SignUp = () => {
 
 	const navigate = useNavigate();
 
-	const onChange = (e) => {
+	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFormData((prevState) => ({
 			...prevState,
 			[e.target.id]: e.target.value
 		}))
+	}
+
+	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		try {
+			if(!password) return console.error('password is required')
+				
+			const auth = getAuth(app);
+			const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+			const user = userCredential.user;
+
+			if(auth.currentUser) {
+				updateProfile(auth.currentUser, {
+					displayName: name
+				})
+			} else {
+				return console.error("No user is currently authenticated.");
+			}
+
+			const formDataCopy = {...formData};
+			delete formDataCopy.password;
+			formDataCopy.timestamp = serverTimestamp();
+
+			await setDoc(doc(db, 'users', user.uid), formDataCopy)
+
+			navigate('/')
+		} catch (error) {
+			console.error(error)
+		}
 	}
 
 	return (
@@ -31,7 +70,7 @@ export const SignUp = () => {
 				</header>
 
 				{/*<main>*/}
-					<form>
+					<form onSubmit={onSubmit}>
 						<input 
 							type="text" 
 							placeholder="Name" 
@@ -73,7 +112,7 @@ export const SignUp = () => {
 
 						<div className="signUpBar">
 							<p className="signUpText">Sign Up</p>
-							<button className="signUpButton">
+							<button type="submit" className="signUpButton">
 								<ArrowRightIcon fill='#ffffff' width='34px' height='34px' />
 							</button>
 						</div>
