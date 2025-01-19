@@ -9,6 +9,7 @@ import { Navbar } from "./components/Navbar"
 import { ToastContainer } from "react-toastify"
 import { PrivateRoute } from "./components/PrivateRoute"
 import { Category as CategoryPage } from "./pages/Category"
+import { CreateListing as CreateListingPage } from "./pages/CreateListing"
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
 					<Route path="/sign-in" element={<SignInPage />} />
 					<Route path="/sign-up" element={<SignUpPage />} />
 					<Route path="/forgot-password" element={<ForgotPasswordPage />} />
+					<Route path="/create-listing" element={<CreateListingPage />} />
 				</Routes>
 				<Navbar />
 			</BrowserRouter>

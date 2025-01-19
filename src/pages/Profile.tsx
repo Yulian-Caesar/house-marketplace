@@ -2,8 +2,10 @@ import { getAuth, updateProfile } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import app, { db } from "../firebase.config";
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import ArrowRightIcon from "../assets/svg/keyboardArrowRightIcon.svg";
+import HomeIcon from "../assets/svg/homeIcon.svg";
 
 
 type UserType = {
@@ -97,6 +99,12 @@ export const Profile = () => {
 					/>
 				</form>
 			</div>
+
+			<Link to='/create-listing' className="createListing">
+				<img src={HomeIcon} alt="home" />
+				<p>Sell or rent your home</p>
+				<img src={ArrowRightIcon} alt="arrow right" />
+			</Link>
 		</main>
 	</div>
 }
