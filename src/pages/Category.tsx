@@ -1,5 +1,5 @@
 import { collection, getDocs, query, where, orderBy, limit, startAfter } from "firebase/firestore";
-import app, { db } from "../firebase.config";
+import { db } from "../firebase.config";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { toast } from "react-toastify";
