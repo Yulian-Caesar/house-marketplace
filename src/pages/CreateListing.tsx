@@ -3,9 +3,10 @@ import app, { db } from "../firebase.config";
 import { useNavigate } from "react-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Spinner } from "../components/Spinner";
+import { toast } from "react-toastify";
 
 export const CreateListing = () => {
-	const [geolocationEnabled, setGeolocationEnabled] = useState(true);
+	const [geolocationEnabled, setGeolocationEnabled] = useState(false);
 	const [loading, setLoading] = useState(false)
 	const [formData, setFormData] = useState({
 		type: 'rent',
@@ -59,10 +60,35 @@ export const CreateListing = () => {
 	}, [isMounted])
 
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault()
+		e.preventDefault();
+
+		setLoading(true)
+
+		if(discountedPrice >= regularPrice) {
+			setLoading(false)
+			return toast.error('Discounted price needs to be less that regular price')
+		}
+
+		if(images.length > 6) {
+			setLoading(false)
+			return toast.error('Max 6 images')
+		}
+
+		let geolocation = {};
+		let location;
+
+		if(geolocationEnabled) {
+			// add geolocation here by google or something
+		} else {
+			geolocation.lat = latitude;
+			geolocation.lng = longitude;
+			location = address;
+		}
+
+		setLoading(false)
 	}
 
-	const onMutate = (e) => {
+	const onMutate = (e: any) => {
 		let boolean = null;
 
 		if(e.target.value === 'true') {
@@ -172,8 +198,8 @@ export const CreateListing = () => {
 							id='parking'
 							value='true'
 							onClick={onMutate}
-							min='1'
-							max='50'
+							//min='1'
+							//max='50'
 							>
 							Yes
 						</button>
