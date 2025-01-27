@@ -1,9 +1,12 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { addDoc, collection, serverTimestamp, Timestamp, doc, setDoc  } from "firebase/firestore";
+//import { getStorage, ref, uploadBytesResumable, getDownloadURL, uploadBytes } from "firebase/storage";
 import app, { db } from "../firebase.config";
 import { useNavigate } from "react-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Spinner } from "../components/Spinner";
 import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid"
 
 export const CreateListing = () => {
 	const [geolocationEnabled, setGeolocationEnabled] = useState(false);
@@ -37,17 +40,17 @@ export const CreateListing = () => {
 		images,
 		latitude,
 		longitude,
-	  } = formData
+	} = formData
 
 	const auth = getAuth(app);
 	const navigate = useNavigate();
 	const isMounted = useRef(true);
 
 	useEffect(() => {
-		if(isMounted) {
+		if (isMounted) {
 			onAuthStateChanged(auth, (user) => {
-				if(user) {
-					setFormData({...formData, userRef: user.uid})
+				if (user) {
+					setFormData({ ...formData, userRef: user.uid })
 				} else {
 					navigate('/sign-in')
 				}
@@ -59,17 +62,17 @@ export const CreateListing = () => {
 		}
 	}, [isMounted])
 
-	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		setLoading(true)
 
-		if(discountedPrice >= regularPrice) {
+		if (discountedPrice >= regularPrice) {
 			setLoading(false)
 			return toast.error('Discounted price needs to be less that regular price')
 		}
 
-		if(images.length > 6) {
+		if (images.length > 6) {
 			setLoading(false)
 			return toast.error('Max 6 images')
 		}
@@ -77,29 +80,87 @@ export const CreateListing = () => {
 		let geolocation = {};
 		let location;
 
-		if(geolocationEnabled) {
+		if (geolocationEnabled) {
 			// add geolocation here by google or something
 		} else {
 			geolocation.lat = latitude;
 			geolocation.lng = longitude;
-			location = address;
 		}
 
+		const formDataCopy = {
+			...formData,
+			//imgUrls,
+			geolocation,
+			timestamp: serverTimestamp()
+		}
+
+		formDataCopy.location = address;
+		delete formDataCopy.images;
+		delete formDataCopy.address;
+		!formDataCopy.offer && delete formDataCopy.discountedPrice;
+
+		const docRef = await addDoc(collection(db, 'listings'), formDataCopy)
 		setLoading(false)
+		toast.success('Listing saved')
+		navigate(`/category/${formDataCopy.type}/${docRef.id}`)
+
+		// Store image in firebase
+		//const storeImage = async (image) => {
+		//	return new Promise((resolve, reject) => {
+		//		const storage = getStorage();
+		//		const fileName = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+
+		//		const storageRef = ref(storage, 'images/' + fileName);
+		//		const uploadTask = uploadBytesResumable(storageRef, image);
+
+		//		uploadTask.on('state_changed', 
+		//			(snapshot) => {
+		//			  const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+		//			  console.log('Upload is ' + progress + '% done');
+		//			  switch (snapshot.state) {
+		//				case 'paused':
+		//				  console.log('Upload is paused');
+		//				  break;
+		//				case 'running':
+		//				  console.log('Upload is running');
+		//				  break;
+		//			  }
+		//			}, 
+		//			(error) => {
+		//				reject(error)
+		//			}, 
+		//			() => {
+		//			  getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+		//				resolve(downloadURL);
+		//			  });
+		//			}
+		//		  );
+		//	})
+		//}
+
+		//const imgUrls = await Promise.all(
+		//	[...images].map(image => storeImage(image))
+		//).catch(() => {
+		//	setLoading(false)
+		//	 toast.error('Images not uploaded');
+		//	 return
+		//})
+
+		//console.log(imgUrls)
 	}
 
 	const onMutate = (e: any) => {
 		let boolean = null;
 
-		if(e.target.value === 'true') {
+		if (e.target.value === 'true') {
 			boolean = true;
 		}
-		if(e.target.value === 'false') {
+		if (e.target.value === 'false') {
 			boolean = false;
 		}
-		
+
 		// Files
-		if(e.target.files) {
+		if (e.target.files) {
 			setFormData(prevState => ({
 				...prevState,
 				images: e.target.files
@@ -107,7 +168,7 @@ export const CreateListing = () => {
 		}
 
 		// Text/Boolean/Numbers
-		if(!e.target.files) {
+		if (!e.target.files) {
 			setFormData(prevState => ({
 				...prevState,
 				[e.target.id]: boolean ?? e.target.value
@@ -115,7 +176,7 @@ export const CreateListing = () => {
 		}
 	}
 
-	if(loading) {
+	if (loading) {
 		return <Spinner />
 	}
 
@@ -131,7 +192,7 @@ export const CreateListing = () => {
 					<div className="formButtons">
 						<button
 							type='button'
-							className={type === 'sale' ? 'formButtonActive': 'formButton'}
+							className={type === 'sale' ? 'formButtonActive' : 'formButton'}
 							id='type'
 							value='sale'
 							onClick={onMutate}
@@ -140,7 +201,7 @@ export const CreateListing = () => {
 						</button>
 						<button
 							type='button'
-							className={type === 'rent' ? 'formButtonActive': 'formButton'}
+							className={type === 'rent' ? 'formButtonActive' : 'formButton'}
 							id='type'
 							value='rent'
 							onClick={onMutate}
@@ -198,9 +259,9 @@ export const CreateListing = () => {
 							id='parking'
 							value='true'
 							onClick={onMutate}
-							//min='1'
-							//max='50'
-							>
+						//min='1'
+						//max='50'
+						>
 							Yes
 						</button>
 						<button
@@ -211,7 +272,7 @@ export const CreateListing = () => {
 							id='parking'
 							value='false'
 							onClick={onMutate}
-							>
+						>
 							No
 						</button>
 					</div>
@@ -224,20 +285,20 @@ export const CreateListing = () => {
 							id='furnished'
 							value='true'
 							onClick={onMutate}
-							>
+						>
 							Yes
 						</button>
 						<button
 							className={
 								!furnished && furnished !== null
-								? 'formButtonActive'
-								: 'formButton'
+									? 'formButtonActive'
+									: 'formButton'
 							}
 							type='button'
 							id='furnished'
 							value='false'
 							onClick={onMutate}
-							>
+						>
 							No
 						</button>
 					</div>
@@ -287,7 +348,7 @@ export const CreateListing = () => {
 							id='offer'
 							value='true'
 							onClick={onMutate}
-							>
+						>
 							Yes
 						</button>
 						<button
@@ -298,7 +359,7 @@ export const CreateListing = () => {
 							id='offer'
 							value='false'
 							onClick={onMutate}
-							>
+						>
 							No
 						</button>
 					</div>

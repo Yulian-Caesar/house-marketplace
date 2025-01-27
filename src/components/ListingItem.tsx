@@ -27,7 +27,7 @@ export const ListingItem = ({ listing, id, onDelete}: MyType) => {
 	return listing ? (
 		<li className="categoryListing">
 			<Link to={`/category/${listing.type}/${id}`} className="categoryListingLink">
-				<img src={listing.imgUrls[0]} 
+				<img src={listing.imgUrls && listing.imgUrls[0]} 
 					alt={listing.name} 
 					className="categoryListingImg" 
 				/>
