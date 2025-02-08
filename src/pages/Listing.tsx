@@ -5,9 +5,12 @@ import app, {db} from "../firebase.config";
 import { getAuth } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { Spinner } from '../components/Spinner';
+import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
+import { ListingType } from "../components/ListingItem";
+import { toast } from 'react-toastify';
 
 export const Listing = () => {
-	const [listing, setListing] = useState(null);
+	const [listing, setListing] = useState<ListingType | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [shareLinkCopied, setShareLinkCopied] = useState(false);
 
@@ -17,19 +20,24 @@ export const Listing = () => {
 
 	useEffect(() => {
 		const fetchListing = async() => {
+			if (!params.listingId) return toast.error('ListingId is missing')
+
 			const docRef = doc(db, 'listings', params.listingId);
 			const docSnap = await getDoc(docRef)
 
 			if(docSnap.exists()) {
-				setListing(docSnap.data())
+				const data = docSnap.data() as ListingType;
+				setListing(data)
 				setLoading(false)
 			}
 		}
-
+		
 		fetchListing()
 	}, [navigate, params.listingId])
 
 	if(loading) return <Spinner />
+	
+	if(!listing) return <Spinner />
 
 	return (
 		<main>
@@ -66,7 +74,28 @@ export const Listing = () => {
 				</ul>
 
 				<p className="listingLocationTitle">Location</p>
-				{/* Map */}
+				
+				{listing.latitude && listing.longitude && (
+					<div className="leafletContainer">
+						<MapContainer
+							style={{height: '100%', width: '100%'}}
+							center={[+listing.latitude, +listing.longitude]}
+							//center={[51.505, -0.09]}
+							zoom={13}
+							scrollWheelZoom={false}
+						>
+							<TileLayer
+								attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+								url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+							/>
+							<Marker position={[+listing.latitude, +listing.longitude]}>
+								<Popup>
+									{listing.location}
+								</Popup>
+							</Marker>
+						</MapContainer>
+					</div>
+				)}
 
 				{auth.currentUser?.uid !== listing.userRef && (
 					<Link 

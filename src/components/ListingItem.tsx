@@ -15,6 +15,11 @@ export type ListingType = {
 	bedrooms: number,
 	bathrooms: number,
 	id: string,
+	parking? : boolean,
+	furnished? : boolean,
+	latitude? : string,
+	longitude? : string,
+	userRef: string
 }
 
 type MyType = {

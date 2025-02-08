@@ -22,7 +22,7 @@ export const Contact = () => {
 
 	useEffect(() => {
 		const getLandlord = async () => {
-			if (!params.landlordId) return toast.error('LandlordId is missing in the URL')
+			if (!params.landlordId) return toast.error('LandlordId is missing')
 
 			const docRef = doc(db, 'users', params.landlordId);
 			const docSnap = await getDoc(docRef)
