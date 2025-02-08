@@ -5,9 +5,12 @@ import app, {db} from "../firebase.config";
 import { getAuth } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { Spinner } from '../components/Spinner';
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { ListingType } from "../components/ListingItem";
 import { toast } from 'react-toastify';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.css'
 
 export const Listing = () => {
 	const [listing, setListing] = useState<ListingType | null>(null);
@@ -36,13 +39,24 @@ export const Listing = () => {
 	}, [navigate, params.listingId])
 
 	if(loading) return <Spinner />
-	
-	if(!listing) return <Spinner />
 
 	return (
 		<main>
-			{/* Slider */}
-
+			{listing && (
+				<Swiper 
+					style={{height: '250px'}}
+					modules={[Navigation, Pagination, Scrollbar, A11y]}
+					slidesPerView={1} 
+					pagination={{clickable: true}}
+				>
+					{listing.imgUrls.map((url, index) => (
+						<SwiperSlide key={index}>
+							<div style={{background: `url(${url}) center no-repeat`, backgroundSize: 'cover'}} className="swiperSlideDiv"></div>
+						</SwiperSlide>
+					))}
+				</Swiper>
+			)}
+			
 			<div className="shareIconDiv" onClick={() => {
 				navigator.clipboard.writeText(window.location.href)
 				setShareLinkCopied(true)
