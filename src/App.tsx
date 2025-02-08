@@ -11,6 +11,7 @@ import { PrivateRoute } from "./components/PrivateRoute"
 import { Category as CategoryPage } from "./pages/Category"
 import { CreateListing as CreateListingPage } from "./pages/CreateListing"
 import { Listing as ListingPage } from "./pages/Listing"
+import { Contact as ContactPage } from "./pages/Contact"
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
 					<Route path="/forgot-password" element={<ForgotPasswordPage />} />
 					<Route path="/create-listing" element={<CreateListingPage />} />
 					<Route path='/category/:categoryName/:listingId' element={<ListingPage />} />
+					<Route path="/contact/:landlordId" element={<ContactPage />} />
 				</Routes>
 				<Navbar />
 			</BrowserRouter>
