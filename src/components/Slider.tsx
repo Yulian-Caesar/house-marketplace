@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router';
 import { ListingType } from "../components/ListingItem";
 import { Spinner } from './Spinner';
 
-type ListingsType = {
+export type ListingsType = {
 	id: string;
 	data: ListingType;
 }
@@ -29,7 +29,7 @@ export const Slider = () => {
 			querySnap.forEach((doc) => {
 				return listings.push({
 					id: doc.id,
-					data: doc.data()
+					data: doc.data() as ListingType
 				})
 			})
 			setListings(listings)

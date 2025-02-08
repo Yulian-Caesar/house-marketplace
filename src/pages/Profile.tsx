@@ -1,12 +1,13 @@
 import { getAuth, updateProfile } from "firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, collection, getDocs, query, where, orderBy, deleteDoc, limit } from "firebase/firestore";
 import app, { db } from "../firebase.config";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import ArrowRightIcon from "../assets/svg/keyboardArrowRightIcon.svg";
 import HomeIcon from "../assets/svg/homeIcon.svg";
-
+import { ListingsType } from "../components/Slider";
+import { ListingItem, ListingType } from "../components/ListingItem";
 
 type UserType = {
 	name?: string | null
@@ -15,12 +16,14 @@ type UserType = {
 
 export const Profile = () => {
 	const auth = getAuth(app);
+	const [loading, setLoading] = useState(true)
+	const [listings, setListings] = useState<ListingsType[]>([])
 	const [changeDetails, setChangeDetails] = useState(false)
 	const [formData, setFormData] = useState<UserType | null>({
 		name: auth.currentUser?.displayName || null,
 		email: auth.currentUser?.email || null
 	})
-	const {name, email} = formData;
+	const {name, email} = formData as UserType;
 
 	const navigate = useNavigate();
 
@@ -28,6 +31,26 @@ export const Profile = () => {
 		auth.signOut()
 		navigate('/')
 	}
+
+	useEffect(() => {
+		const fetchUserListings = async() => {
+			const listingsRef = collection(db, 'listings');
+			const q = query(listingsRef, where('userRef', '==', auth.currentUser?.uid), orderBy('timestamp', 'desc'), limit(5))
+			const querySnap = await getDocs(q);
+
+			const listings: ListingsType[] = [];
+			querySnap.forEach((doc) => {
+				return listings.push({
+					id: doc.id,
+					data: doc.data() as ListingType
+				})
+			})
+			console.log(listings)
+			setListings(listings)
+			setLoading(false)
+		}
+		fetchUserListings()
+	}, [auth.currentUser?.uid])
 
 	const onSubmit = async() => {
 		try {
@@ -58,6 +81,14 @@ export const Profile = () => {
 			...prevState,
 			[e.target.id]: e.target.value
 		}))
+	}
+
+	const onDelete = async (listingId: string) => {
+		if(window.confirm('Are you sure you want to delete?')) {
+			await deleteDoc(doc(db, 'listings', listingId))
+			const updatedListings = listings.filter(listing => listing.id !== listingId)
+			setListings(updatedListings)
+		}
 	}
 
 	return <div className="profile">
@@ -105,6 +136,18 @@ export const Profile = () => {
 				<p>Sell or rent your home</p>
 				<img src={ArrowRightIcon} alt="arrow right" />
 			</Link>
+
+			{!loading && listings?.length > 0 && (
+				<>
+					<p className="listingText">Your Listings</p>
+					<ul className="listingsList">
+						{listings.map(listing => (
+							<ListingItem key={listing.id} id={listing.id} listing={listing.data} onDelete={() => onDelete(listing.id)} />
+						))}
+					</ul>
+				</>
+			)}
+
 		</main>
 	</div>
 }
