@@ -1,22 +1,25 @@
 export type ListingType = {
-	type: string,
-	imgUrls: string[],
+	type: 'rent' | 'sale',
+	imgUrls?: string[],
 	name: string,
-	location: string,
+	location?: string,
 	offer: boolean,
-	discountedPrice: number,
-	regularPrice: number,
+	discountedPrice?: string,
+	regularPrice: string,
 	bedrooms: number,
 	bathrooms: number,
-	id: string,
+	id?: string,
 	parking? : boolean,
 	furnished? : boolean,
 	latitude? : string,
 	longitude? : string,
-	userRef: string,
+	userRef?: string,
 	address?: string,
-	images?: object
+	images?: File[]
 }
+
+//export type ListingFormDataType = ListingType & {
+//}
 
 export type ListingsType = {
 	id: string;
@@ -34,6 +37,8 @@ export type SignUpFormDataType = {
 	password?: string,
 	timestamp?: FieldValue
 }
+
+
 
 export type ListingItemType = {
 	listing: ListingType,

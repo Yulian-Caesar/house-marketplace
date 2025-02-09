@@ -9,10 +9,10 @@ import { toast } from "react-toastify";
 import { ListingType } from "../types";
 
 export const EditListing = () => {
-	const [geolocationEnabled, setGeolocationEnabled] = useState(false);
+	const [geolocationEnabled] = useState(false);
 	const [loading, setLoading] = useState(false)
 	const [listing, setListing] = useState<ListingType | null>(null)
-	const [formData, setFormData] = useState({
+	const [formData, setFormData] = useState<ListingType>({
 		type: 'rent',
 		name: '',
 		bedrooms: 1,
@@ -21,9 +21,9 @@ export const EditListing = () => {
 		furnished: false,
 		address: '',
 		offer: false,
-		regularPrice: 0,
-		discountedPrice: 0,
-		images: {},
+		regularPrice: '0',
+		discountedPrice: '0',
+		images: [],
 		latitude: '0',
 		longitude: '0'
 	})
@@ -101,24 +101,28 @@ export const EditListing = () => {
 
 		setLoading(true)
 
-		if (+discountedPrice >= +regularPrice) {
+		if (discountedPrice && +discountedPrice >= +regularPrice) {
 			setLoading(false)
 			return toast.error('Discounted price needs to be less that regular price')
 		}
 
-		if (images.length > 6) {
+		if (images && images.length > 6) {
 			setLoading(false)
 			return toast.error('Max 6 images')
 		}
 
-		let geolocation = {};
-		let location;
+		const geolocation: {lat: string, lng: string, location: string} = {
+			lat: '0',
+			lng: '0',
+			location: ''
+		};
+		//let location;
 
 		if (geolocationEnabled) {
 			// add geolocation here by google or something
 		} else {
-			geolocation.lat = latitude;
-			geolocation.lng = longitude;
+			geolocation.lat = latitude || '';
+			geolocation.lng = longitude || '';
 		}
 
 		const formDataCopy = {
@@ -175,8 +179,9 @@ export const EditListing = () => {
 		formDataCopy.location = address;
 		delete formDataCopy.images;
 		delete formDataCopy.address;
-		!formDataCopy.offer && delete formDataCopy.discountedPrice;
+		if(!formDataCopy.offer) delete formDataCopy.discountedPrice;
 
+		if(!params.listingId) return toast.error('Listing id is missing')
 		// update listing
 		const docRef = doc(db, 'listings', params.listingId)
 		await updateDoc(docRef, formDataCopy)
@@ -185,31 +190,30 @@ export const EditListing = () => {
 		navigate(`/category/${formDataCopy.type}/${docRef.id}`)
 	}
 
-	const onMutate = (e: any) => {
+	const onMutateImages = (e: React.ChangeEvent<HTMLInputElement>) => {
+		// Files
+		const filesArray = Array.from(e.target.files || []);
+    
+		setFormData(prevState => ({
+			...prevState,
+			images: filesArray
+		}));
+	}
+	
+	const onMutate = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.MouseEvent<HTMLButtonElement>) => {
 		let boolean = null;
-
-		if (e.target.value === 'true') {
+		const target = e.currentTarget;
+		if (target.value === 'true') {
 			boolean = true;
 		}
-		if (e.target.value === 'false') {
+		if (target.value === 'false') {
 			boolean = false;
 		}
-
-		// Files
-		if (e.target.files) {
-			setFormData(prevState => ({
-				...prevState,
-				images: e.target.files
-			}))
-		}
-
 		// Text/Boolean/Numbers
-		if (!e.target.files) {
-			setFormData(prevState => ({
-				...prevState,
-				[e.target.id]: boolean ?? e.target.value
-			}))
-		}
+		setFormData(prevState => ({
+			...prevState,
+			[target.id]: boolean ?? target.value
+		}))
 	}
 
 	if (loading) {
@@ -438,7 +442,7 @@ export const EditListing = () => {
 						className='formInputFile'
 						type='file'
 						id='images'
-						onChange={onMutate}
+						onChange={onMutateImages}
 						max='6'
 						accept='.jpg,.png,.jpeg'
 						multiple

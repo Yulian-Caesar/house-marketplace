@@ -8,7 +8,7 @@ import { LandlordType } from "../types/index";
 export const Contact = () => {
 	const [message, setMessage] = useState('')
 	const [landlord, setLandlord] = useState<LandlordType | null>(null)
-	const [searchParams, setSearchParams] = useSearchParams('')
+	const [searchParams] = useSearchParams('')
 
 	const params = useParams<{landlordId: string}>();
 
