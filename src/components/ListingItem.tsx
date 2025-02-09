@@ -1,4 +1,5 @@
 import DeleteIcon from "../assets/svg/deleteIcon.svg?react";
+import EditIcon from "../assets/svg/editIcon.svg?react";
 import bedIcon from "../assets/svg/bedIcon.svg";
 import bathtubIcon from "../assets/svg/bathtubIcon.svg";
 import { Link } from "react-router";
@@ -25,10 +26,11 @@ export type ListingType = {
 type MyType = {
 	listing: ListingType,
 	id: string,
+	onEdit?: (id: string) => void
 	onDelete?: (id: string, name: string) => void
 }
 
-export const ListingItem = ({ listing, id, onDelete}: MyType) => {
+export const ListingItem = ({ listing, id, onEdit, onDelete}: MyType) => {
 	return listing ? (
 		<li className="categoryListing">
 			<Link to={`/category/${listing.type}/${id}`} className="categoryListingLink">
@@ -63,6 +65,8 @@ export const ListingItem = ({ listing, id, onDelete}: MyType) => {
 					onClick={() => onDelete(listing.id, listing.name)}
 				/>
 			)}
+
+			{onEdit && <EditIcon className="editIcon" onClick={() => onEdit(id)} />}
 		</li>
 	) : <Spinner />
 }
