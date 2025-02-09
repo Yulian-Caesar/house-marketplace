@@ -43,7 +43,7 @@ export const Slider = () => {
 
 	if(listings.length === 0) return <></>
 
-	return listings && listings.data.imgUrls.length && (
+	return listings && listings?.data?.imgUrls.length && (
 		<>
 			<p className='exploreHeading'>Reccomended</p>
 
