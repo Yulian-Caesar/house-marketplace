@@ -107,7 +107,8 @@ export const Profile = () => {
 				</p>
 			</div>
 
-			<div className="profileCard">
+			{name && email && (
+				<div className="profileCard">
 				<form action="">
 					<input 
 						type="text" 
@@ -127,6 +128,8 @@ export const Profile = () => {
 					/>
 				</form>
 			</div>
+			)}
+			
 
 			<Link to='/create-listing' className="createListing">
 				<img src={HomeIcon} alt="home" />

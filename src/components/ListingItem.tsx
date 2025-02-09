@@ -39,7 +39,7 @@ export const ListingItem = ({ listing, id, onEdit, onDelete}: ListingItemType) =
 				<DeleteIcon 
 					fill="rgb(231, 76, 60)" 
 					className="removeIcon"
-					onClick={() => onDelete(listing.id, listing.name)}
+					onClick={() => onDelete(id, listing.name)}
 				/>
 			)}
 

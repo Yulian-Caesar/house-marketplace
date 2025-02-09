@@ -52,7 +52,7 @@ export const Slider = () => {
 						<SwiperSlide key={id} onClick={() => navigate(`/category/${data.type}/${id}`)}>
 							<div 
 								className="swiperSlideDiv" 
-								style={{background: `url(${data.imgUrls[0]}) center no-repeat`, backgroundSize: 'cover'}} 
+								style={{background: `url(${data.imgUrls ? data.imgUrls[0] : ''}) center no-repeat`, backgroundSize: 'cover'}} 
 							>
 								<p className="swiperSlideText">{data.name}</p>
 								<p className="swiperSlidePrice">

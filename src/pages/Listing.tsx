@@ -68,58 +68,60 @@ export const Listing = () => {
 			</div>
 			{shareLinkCopied && <p className='linkCopied'>Link Copied!</p>}
 
-			<div className="listingDetails">
-				<p className='listingName'>
-					{listing.name} - ${listing.offer ? listing.discountedPrice : listing.regularPrice}
-				</p>
-				<p className="listingLocation">{listing.location}</p>
-				<p className="listingType">For {listing.type === 'rent' ? 'Rent' : 'Sale'}</p>
-				{listing.offer && (
-					<p className="discountPrice">
-						${listing.regularPrice - listing.discountedPrice} discount
+			{listing && (
+				<div className="listingDetails">
+					<p className='listingName'>
+						{listing.name} - ${listing.offer ? listing.discountedPrice : listing.regularPrice}
 					</p>
-				)}
+					<p className="listingLocation">{listing.location}</p>
+					<p className="listingType">For {listing.type === 'rent' ? 'Rent' : 'Sale'}</p>
+					{listing.offer && (
+						<p className="discountPrice">
+							${+listing.regularPrice - +(listing.discountedPrice || 0)} discount
+						</p>
+					)}
 
-				<ul className="listingDetailsList">
-					<li>{listing.bedrooms > 1 ? `${listing.bedrooms} Bedrooms` : '1 Bedroom'}</li>
-					<li>{listing.bathrooms > 1 ? `${listing.bathrooms} Bathrooms` : '1 Bathroom'}</li>
-					<li>{listing.parking && 'Parking Spot'}</li>
-					<li>{listing.furnished && 'Furnished'}</li>
-				</ul>
+					<ul className="listingDetailsList">
+						<li>{listing.bedrooms > 1 ? `${listing.bedrooms} Bedrooms` : '1 Bedroom'}</li>
+						<li>{listing.bathrooms > 1 ? `${listing.bathrooms} Bathrooms` : '1 Bathroom'}</li>
+						<li>{listing.parking && 'Parking Spot'}</li>
+						<li>{listing.furnished && 'Furnished'}</li>
+					</ul>
 
-				<p className="listingLocationTitle">Location</p>
-				
-				{listing.latitude && listing.longitude ? (
-					<div className="leafletContainer">
-						<MapContainer
-							style={{height: '100%', width: '100%'}}
-							center={[+listing.latitude, +listing.longitude]}
-							//center={[51.505, -0.09]}
-							zoom={13}
-							scrollWheelZoom={false}
+					<p className="listingLocationTitle">Location</p>
+					
+					{listing.latitude && listing.longitude ? (
+						<div className="leafletContainer">
+							<MapContainer
+								style={{height: '100%', width: '100%'}}
+								center={[+listing.latitude, +listing.longitude]}
+								//center={[51.505, -0.09]}
+								zoom={13}
+								scrollWheelZoom={false}
+							>
+								<TileLayer
+									attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+									url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+								/>
+								<Marker position={[+listing.latitude, +listing.longitude]}>
+									<Popup>
+										{listing.location}
+									</Popup>
+								</Marker>
+							</MapContainer>
+						</div>
+					) : ''}
+
+					{auth.currentUser?.uid !== listing.userRef && (
+						<Link 
+							to={`/contact/${listing.userRef}?listingName=${listing.name}`} 
+							className='primaryButton'
 						>
-							<TileLayer
-								attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-								url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-							/>
-							<Marker position={[+listing.latitude, +listing.longitude]}>
-								<Popup>
-									{listing.location}
-								</Popup>
-							</Marker>
-						</MapContainer>
-					</div>
-				) : ''}
-
-				{auth.currentUser?.uid !== listing.userRef && (
-					<Link 
-						to={`/contact/${listing.userRef}?listingName=${listing.name}`} 
-						className='primaryButton'
-					>
-						Contact Landlord
-					</Link>
-				)}
-			</div>
+							Contact Landlord
+						</Link>
+					)}
+				</div>
+			)}
 		</main>
 	)
 }
