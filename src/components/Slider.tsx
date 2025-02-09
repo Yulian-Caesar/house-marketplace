@@ -5,13 +5,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { ListingType } from "../components/ListingItem";
+import { ListingsType, ListingType } from "../types";
 import { Spinner } from './Spinner';
-
-export type ListingsType = {
-	id: string;
-	data: ListingType;
-}
 
 export const Slider = () => {
 	const [loading, setLoading] = useState(true)
@@ -43,7 +38,7 @@ export const Slider = () => {
 
 	if(listings.length === 0) return <></>
 
-	return listings && listings?.data?.imgUrls.length && (
+	return listings && (
 		<>
 			<p className='exploreHeading'>Reccomended</p>
 

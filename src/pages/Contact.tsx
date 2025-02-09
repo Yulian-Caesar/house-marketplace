@@ -3,22 +3,14 @@ import { db } from "../firebase.config.ts";
 import { doc, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-
-type LandlordType = {
-	email: string,
-	name: string
-}
-
-type ParamsType = {
-	landlordId: string
-}
+import { LandlordType } from "../types/index";
 
 export const Contact = () => {
 	const [message, setMessage] = useState('')
 	const [landlord, setLandlord] = useState<LandlordType | null>(null)
 	const [searchParams, setSearchParams] = useSearchParams('')
 
-	const params = useParams<ParamsType>();
+	const params = useParams<{landlordId: string}>();
 
 	useEffect(() => {
 		const getLandlord = async () => {

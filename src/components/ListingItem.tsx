@@ -4,35 +4,10 @@ import bedIcon from "../assets/svg/bedIcon.svg";
 import bathtubIcon from "../assets/svg/bathtubIcon.svg";
 import { Link } from "react-router";
 import { Spinner } from "./Spinner";
+import { ListingItemType } from "../types";
 
-export type ListingType = {
-	type: string,
-	imgUrls: string[],
-	name: string,
-	location: string,
-	offer: boolean,
-	discountedPrice: number,
-	regularPrice: number,
-	bedrooms: number,
-	bathrooms: number,
-	id: string,
-	parking? : boolean,
-	furnished? : boolean,
-	latitude? : string,
-	longitude? : string,
-	userRef: string,
-	address?: string,
-	images?: object
-}
 
-type MyType = {
-	listing: ListingType,
-	id: string,
-	onEdit?: (id: string) => void
-	onDelete?: (id: string, name: string) => void
-}
-
-export const ListingItem = ({ listing, id, onEdit, onDelete}: MyType) => {
+export const ListingItem = ({ listing, id, onEdit, onDelete}: ListingItemType) => {
 	return listing ? (
 		<li className="categoryListing">
 			<Link to={`/category/${listing.type}/${id}`} className="categoryListingLink">

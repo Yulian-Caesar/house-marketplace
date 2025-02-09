@@ -3,8 +3,8 @@ import { db } from "../firebase.config.ts";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Spinner } from "../components/Spinner";
-import { ListingItem, ListingType } from "../components/ListingItem";
-import { ListingsType } from "../components/Slider";
+import { ListingItem } from "../components/ListingItem";
+import { ListingType, ListingsType } from "../types";
 
 export const Offers = () => {
 	const [listings, setListings] = useState<ListingsType[]>([])

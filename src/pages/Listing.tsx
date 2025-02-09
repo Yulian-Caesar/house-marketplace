@@ -6,7 +6,7 @@ import { getAuth } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { Spinner } from '../components/Spinner';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
-import { ListingType } from "../components/ListingItem";
+import { ListingType } from "../types";
 import { toast } from 'react-toastify';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';

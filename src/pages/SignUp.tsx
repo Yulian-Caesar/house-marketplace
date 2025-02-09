@@ -3,21 +3,15 @@ import ArrowRightIcon from "../assets/svg/keyboardArrowRightIcon.svg?react";
 import visibilityIcon from "../assets/svg/visibilityIcon.svg";
 import { Link, useNavigate } from "react-router";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { doc, setDoc, FieldValue, serverTimestamp } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { app, db } from "../firebase.config.ts";
 import { toast } from "react-toastify";
 import { OAuth } from "../components/OAuth";
-
-export type FormDataType = {
-	name: string,
-	email: string,
-	password?: string,
-	timestamp?: FieldValue
-}
+import { SignUpFormDataType } from "../types/index";
 
 export const SignUp = () => {
 	const [showPassword, setShowPassword] = useState(false)
-	const [formData, setFormData] = useState<FormDataType>({
+	const [formData, setFormData] = useState<SignUpFormDataType>({
 		name: '',
 		email: '',
 		password: ''

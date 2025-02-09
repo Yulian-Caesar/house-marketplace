@@ -6,13 +6,8 @@ import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import ArrowRightIcon from "../assets/svg/keyboardArrowRightIcon.svg";
 import HomeIcon from "../assets/svg/homeIcon.svg";
-import { ListingsType } from "../components/Slider";
-import { ListingItem, ListingType } from "../components/ListingItem";
-
-type UserType = {
-	name?: string | null
-	email?: string | null
-}
+import { ListingItem } from "../components/ListingItem";
+import { ListingType, ListingsType, UserType } from "../types";
 
 export const Profile = () => {
 	const auth = getAuth(app);

@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Spinner } from "../components/Spinner";
 import { toast } from "react-toastify";
-import { ListingType } from "../components/ListingItem";
+import { ListingType } from "../types";
 
 export const EditListing = () => {
 	const [geolocationEnabled, setGeolocationEnabled] = useState(false);

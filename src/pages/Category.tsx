@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { toast } from "react-toastify";
 import { Spinner } from "../components/Spinner";
-import { ListingItem, ListingType } from "../components/ListingItem";
-import { ListingsType } from "../components/Slider";
+import { ListingItem } from "../components/ListingItem";
+import { ListingType, ListingsType } from "../types";
 
 export const Category = () => {
 	const [listings, setListings] = useState<ListingsType[]>([])
