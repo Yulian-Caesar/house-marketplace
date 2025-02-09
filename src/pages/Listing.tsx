@@ -42,7 +42,7 @@ export const Listing = () => {
 
 	return (
 		<main>
-			{listing && (
+			{listing && listing.imgUrls && (
 				<Swiper 
 					style={{height: '250px'}}
 					modules={[Navigation, Pagination, Scrollbar, A11y]}

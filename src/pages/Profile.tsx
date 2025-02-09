@@ -45,7 +45,6 @@ export const Profile = () => {
 					data: doc.data() as ListingType
 				})
 			})
-			console.log(listings)
 			setListings(listings)
 			setLoading(false)
 		}
@@ -88,6 +87,7 @@ export const Profile = () => {
 			await deleteDoc(doc(db, 'listings', listingId))
 			const updatedListings = listings.filter(listing => listing.id !== listingId)
 			setListings(updatedListings)
+			toast.success('Successfully deleted listing')
 		}
 	}
 
