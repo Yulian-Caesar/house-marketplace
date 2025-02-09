@@ -20,7 +20,9 @@ export type ListingType = {
 	furnished? : boolean,
 	latitude? : string,
 	longitude? : string,
-	userRef: string
+	userRef: string,
+	address?: string,
+	images?: object
 }
 
 type MyType = {

@@ -15,7 +15,6 @@ export const Category = () => {
 
 	// Pagination / Load more
 	const onFetchMoreListings = useCallback(async() => {
-		console.log('create function')
 		try{
 			// Get reference
 			const listingsRef = collection(db, 'listings')

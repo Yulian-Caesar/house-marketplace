@@ -1,12 +1,11 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { addDoc, collection, serverTimestamp, Timestamp, doc, setDoc  } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp  } from "firebase/firestore";
 //import { getStorage, ref, uploadBytesResumable, getDownloadURL, uploadBytes } from "firebase/storage";
 import app, { db } from "../firebase.config";
 import { useNavigate } from "react-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Spinner } from "../components/Spinner";
 import { toast } from "react-toastify";
-import { v4 as uuidv4 } from "uuid"
 
 export const CreateListing = () => {
 	const [geolocationEnabled, setGeolocationEnabled] = useState(false);

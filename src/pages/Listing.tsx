@@ -89,7 +89,7 @@ export const Listing = () => {
 
 				<p className="listingLocationTitle">Location</p>
 				
-				{listing.latitude && listing.longitude && (
+				{listing.latitude && listing.longitude ? (
 					<div className="leafletContainer">
 						<MapContainer
 							style={{height: '100%', width: '100%'}}
@@ -109,7 +109,7 @@ export const Listing = () => {
 							</Marker>
 						</MapContainer>
 					</div>
-				)}
+				) : ''}
 
 				{auth.currentUser?.uid !== listing.userRef && (
 					<Link 
