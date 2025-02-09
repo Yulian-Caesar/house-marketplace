@@ -1,5 +1,5 @@
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
-import {db} from "../firebase.config";
+import { db } from "../firebase.config.ts";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css'

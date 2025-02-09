@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import shareIcon from '../assets/svg/shareIcon.svg'
 import { Link, useNavigate, useParams } from 'react-router';
-import app, {db} from "../firebase.config";
+import { app, db } from "../firebase.config.ts";
 import { getAuth } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { Spinner } from '../components/Spinner';

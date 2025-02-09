@@ -1,5 +1,5 @@
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
-import app from "../firebase.config";
+import { app } from "../firebase.config.ts";
 import ArrowRightIcon from "../assets/svg/keyboardArrowRightIcon.svg?react";
 import { useState } from "react";
 import { Link } from "react-router";

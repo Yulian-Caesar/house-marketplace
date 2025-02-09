@@ -1,7 +1,7 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { addDoc, collection, serverTimestamp  } from "firebase/firestore";
 //import { getStorage, ref, uploadBytesResumable, getDownloadURL, uploadBytes } from "firebase/storage";
-import app, { db } from "../firebase.config";
+import { app, db } from "../firebase.config.ts";
 import { useNavigate } from "react-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Spinner } from "../components/Spinner";

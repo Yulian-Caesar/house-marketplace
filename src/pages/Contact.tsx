@@ -1,5 +1,5 @@
 import { useParams, useSearchParams } from "react-router";
-import {db} from "../firebase.config";
+import { db } from "../firebase.config.ts";
 import { doc, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";

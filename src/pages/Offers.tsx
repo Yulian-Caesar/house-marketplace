@@ -1,5 +1,5 @@
 import { collection, getDocs, query, where, orderBy, limit, startAfter, QueryDocumentSnapshot } from "firebase/firestore";
-import { db } from "../firebase.config";
+import { db } from "../firebase.config.ts";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Spinner } from "../components/Spinner";

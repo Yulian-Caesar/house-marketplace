@@ -4,7 +4,7 @@ import visibilityIcon from "../assets/svg/visibilityIcon.svg";
 import { Link, useNavigate } from "react-router";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc, FieldValue, serverTimestamp } from "firebase/firestore";
-import app, { db } from "../firebase.config";
+import { app, db } from "../firebase.config.ts";
 import { toast } from "react-toastify";
 import { OAuth } from "../components/OAuth";
 

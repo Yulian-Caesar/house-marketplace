@@ -3,7 +3,7 @@ import ArrowRightIcon from "../assets/svg/keyboardArrowRightIcon.svg?react";
 import visibilityIcon from "../assets/svg/visibilityIcon.svg";
 import { Link, useNavigate } from "react-router";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import app from "../firebase.config";
+import { app } from "../firebase.config.ts";
 import { toast } from "react-toastify";
 import { OAuth } from "../components/OAuth";
 
